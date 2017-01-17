@@ -1,59 +1,75 @@
 ---
-title: "my first presentation"
+title: "The city Where I live."
 author: "Yan Li"
 date: "17 January 2017"
-output: ioslides_presentation
+output: html_document
 ---
 
 
-
-## My new slide
-
-```{r,echo=FALSE,background='Blue',fig.align='center',fig.cap='My awsome figure'}
-plot(mtcars$wt,mtcars$mpg,xlab="Weight",ylab="MPG")
+# The location of RWTH Aachen, Germany
+```{r}
+library(leaflet)
+my_map <- leaflet() %>% addTiles() 
+my_map <- my_map %>% addMarkers(lat=50.7801, lng= 6.0657, popup="RWTH Aachen university")
+my_map
 ```
+# Add an icon to the location of RWTH Aachen, Germany
 
-Plain text
-
-*italicized text*
-
-**Bold text**
-
-'for (i %in% 1 : 10)'
-
-## My title
-- Bullet 1
-- Bullet 2
-
-1. Item a
-2. Item b
-
-### A top level subheading
-#### A second level subheading
+```{r}
+library(leaflet)
+AachenIcon <-  makeIcon(
+iconUrl = "http://www.rwth-aachen.de/global/show_picture.asp?id=aaaaaaaaaatjcul&w=972&h=840&q=81", 
+iconWidth = 31*215/230, iconHeight = 31,
+iconAnchorX = 31*215/230/2, iconAnchorY = 16
+)
 
 
+AachenLatLong <- data.frame(
+  lat = c(50.7801),
+  lng = c(6.0657)
+)
 
-## R Markdown
+AachenLatLong %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(icon = AachenIcon)
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
-
-## Slide with Bullets
-
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
 ```
+# To add different icons to different urls
 
-## Slide with Plot
+```{r}
+library(leaflet)
+AachenSites <- c(
+  "<a href='http://www.rwth-aachen.de/cms/~a/root/?lidx=1/'>RWTH Aachen Uni.</a>",
+  "<a href='http://www.raileurope-world.com/city/aachen/'>Aachen main train station</a>"
+)
+AachenIcon <-  
+iconList(
+RWTH =makeIcon("http://www.rwth-aachen.de/global/show_picture.asp?id=aaaaaaaaaatjcul&w=972&h=840&q=81", iconWidth = 31*250/230, iconHeight = 50,
+iconAnchorX = 31*250/230/2, iconAnchorY = 50),
+TrainStation=makeIcon("http://www.rwth-aachen.de/global/show_picture.asp?id=aaaaaaaaaatjcul&w=972&h=840&q=81", iconWidth = 31*250/230, iconHeight = 50,
+iconAnchorX = 31*250/230/2, iconAnchorY = 50) 
+)
 
-```{r pressure}
-plot(pressure)
+
+AachenLatLong <- data.frame(
+  lat = c(50.7801,50.7677),
+  lng = c(6.0657,6.0914),
+  type = c("RWTH","TrainStation")
+)
+
+AachenLatLong %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(icon = ~AachenIcon[type],popup =AachenSites )
 ```
+ 
+```{r}
+library(leaflet)
 
+
+  leaflet() %>%
+  addTiles() %>%
+  addRectangles(lat1=50.79,lng1=6.10,
+                lat2=50.75,lng2=6.05)
+```
